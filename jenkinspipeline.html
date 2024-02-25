@@ -1,0 +1,21 @@
+Pipeline {
+    agent any
+
+       stage {
+           stage  ('SCM checkout') {
+             step {
+                git url: "https://github.com/CHOWDS2/Repo2.git" 
+                  }
+            }
+            stage ('archiving artifacts') {
+              step {
+                archive artifacts '**/*.txt'
+                   }
+            }
+         stage('transfer artifacts') {
+        steps {
+            sshPublisher(publishers: [sshPublisherDesc(configName: 'Sampath', transfers: [sshTransfer(excludes: '', execCommands: I, execTimeout: 120000, flatten: true, makeEmptyDirs: false, noDefaultExecluides: false, patternSeperator: '[, ]+', remoteDirectory: '/var/root/Repo2', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '**/*.txt'), verbose: true)])
+              }
+         }
+       }
+}
